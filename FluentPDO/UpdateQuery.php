@@ -2,6 +2,9 @@
 
 namespace FluentPDO;
 
+use Exception;
+use PDOStatement;
+
 /** UPDATE query builder
  *
  * @method UpdateQuery  leftJoin(string $statement) add LEFT JOIN to query
@@ -40,7 +43,7 @@ class UpdateQuery extends CommonQuery
     /**
      * @param string|array $fieldOrArray
      * @param boolean|mixed $value
-     * @throws \Exception
+     * @throws Exception
      * @return $this
      */
     public function set($fieldOrArray, $value = false)
@@ -52,7 +55,7 @@ class UpdateQuery extends CommonQuery
             $this->statements['SET'][$fieldOrArray] = $value;
         } else {
             if (!is_array($fieldOrArray)) {
-                throw new \Exception(
+                throw new Exception(
                     'You must pass a value, or provide the SET list as an associative array. column => value'
                 );
             } else {
@@ -68,7 +71,7 @@ class UpdateQuery extends CommonQuery
     /**
      * Execute update query
      * @param boolean $getResultAsPdoStatement true to return the pdo statement instead of row count
-     * @return int|boolean|\PDOStatement
+     * @return int|boolean|PDOStatement
      */
     public function execute($getResultAsPdoStatement = false)
     {

@@ -2,6 +2,8 @@
 
 namespace FluentPDO;
 
+use PDO;
+
 /**
  * SELECT query builder
  *
@@ -117,7 +119,7 @@ class SelectQuery extends CommonQuery
     public function fetchPairs($key, $value, $object = false)
     {
         if ($s = $this->select(null)->select("$key, $value")->asObject($object)->execute()) {
-            return $s->fetchAll(\PDO::FETCH_KEY_PAIR);
+            return $s->fetchAll(PDO::FETCH_KEY_PAIR);
         }
         return false;
     }

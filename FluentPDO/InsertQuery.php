@@ -2,6 +2,8 @@
 
 namespace FluentPDO;
 
+use Exception;
+
 /** INSERT query builder
  */
 class InsertQuery extends BaseQuery
@@ -61,12 +63,12 @@ class InsertQuery extends BaseQuery
      * Add VALUES
      * @param $values
      * @return InsertQuery
-     * @throws \Exception
+     * @throws Exception
      */
     public function values(array $values)
     {
         if (!is_array($values)) {
-            throw new \Exception('Param VALUES for INSERT query must be array');
+            throw new Exception('Param VALUES for INSERT query must be array');
         }
         $first = current($values);
         if (is_string(key($values))) {
@@ -128,14 +130,14 @@ class InsertQuery extends BaseQuery
 
     /**
      * @param array $oneValue
-     * @throws \Exception
+     * @throws Exception
      */
     private function addOneValue(array $oneValue)
     {
         # check if all $keys are strings
         foreach ($oneValue as $key => $value) {
             if (!is_string($key)) {
-                throw new \Exception('INSERT query: All keys of value array have to be strings.');
+                throw new Exception('INSERT query: All keys of value array have to be strings.');
             }
         }
         if (!$this->firstValue) {
@@ -145,7 +147,7 @@ class InsertQuery extends BaseQuery
             $this->columns = array_keys($oneValue);
         }
         if ($this->columns != array_keys($oneValue)) {
-            throw new \Exception('INSERT query: All VALUES have to same keys (columns).');
+            throw new Exception('INSERT query: All VALUES have to same keys (columns).');
         }
         $this->statements['VALUES'][] = $oneValue;
     }

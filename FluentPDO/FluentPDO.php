@@ -13,6 +13,8 @@
 
 namespace FluentPDO;
 
+use PDO;
+
 class FluentPDO
 {
     private $pdo;
@@ -23,10 +25,10 @@ class FluentPDO
     public $debug;
 
     /**
-     * @param \PDO $pdo
+     * @param PDO $pdo
      * @param FluentStructure $structure
      */
-    public function __construct(\PDO $pdo, FluentStructure $structure = null)
+    public function __construct(PDO $pdo, FluentStructure $structure = null)
     {
         $this->pdo = $pdo;
         if (!$structure) {
@@ -112,7 +114,7 @@ class FluentPDO
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
     public function getPdo()
     {

@@ -2,9 +2,15 @@
 
 namespace FluentPDO;
 
+use PDO;
+use PDOStatement;
+use IteratorAggregate;
+use Exception;
+use DateTime;
+
 /** Base query builder
  */
-abstract class BaseQuery implements \IteratorAggregate
+abstract class BaseQuery implements IteratorAggregate
 {
     /** @var FluentPDO */
     private $fpdo;
@@ -12,7 +18,7 @@ abstract class BaseQuery implements \IteratorAggregate
     /** @var array of definition clauses */
     protected $clauses = [];
 
-    /** @var \PDOStatement */
+    /** @var PDOStatement */
     private $result;
 
     /** @var float */
@@ -96,7 +102,7 @@ abstract class BaseQuery implements \IteratorAggregate
 
     /**
      * Implements method from IteratorAggregate
-     * @return \PDOStatement
+     * @return PDOStatement
      */
     public function getIterator()
     {
@@ -105,7 +111,7 @@ abstract class BaseQuery implements \IteratorAggregate
 
     /**
      * Execute query with earlier added parameters
-     * @return \PDOStatement
+     * @return PDOStatement
      */
     public function execute()
     {
@@ -124,12 +130,12 @@ abstract class BaseQuery implements \IteratorAggregate
 
         if ($this->object !== false) {
             if (class_exists($this->object)) {
-                $result->setFetchMode(\PDO::FETCH_CLASS, $this->object);
+                $result->setFetchMode(PDO::FETCH_CLASS, $this->object);
             } else {
-                $result->setFetchMode(\PDO::FETCH_OBJ);
+                $result->setFetchMode(PDO::FETCH_OBJ);
             }
-        } elseif ($this->fpdo->getPdo()->getAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE) == \PDO::FETCH_BOTH) {
-            $result->setFetchMode(\PDO::FETCH_ASSOC);
+        } elseif ($this->fpdo->getPdo()->getAttribute(PDO::ATTR_DEFAULT_FETCH_MODE) == PDO::FETCH_BOTH) {
+            $result->setFetchMode(PDO::FETCH_ASSOC);
         }
 
         $time = microtime(true);
@@ -177,7 +183,7 @@ abstract class BaseQuery implements \IteratorAggregate
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
     protected function getPDO()
     {
@@ -194,7 +200,7 @@ abstract class BaseQuery implements \IteratorAggregate
 
     /**
      * Get PDOStatement result
-     * @return \PDOStatement
+     * @return PDOStatement
      */
     public function getResult()
     {
@@ -236,7 +242,7 @@ abstract class BaseQuery implements \IteratorAggregate
     /**
      * Generate query
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     protected function buildQuery()
     {
@@ -250,7 +256,7 @@ abstract class BaseQuery implements \IteratorAggregate
                 } elseif (is_callable($separator)) {
                     $query .= call_user_func($separator);
                 } else {
-                    throw new \Exception("Clause '$clause' is incorrectly set to '$separator'.");
+                    throw new Exception("Clause '$clause' is incorrectly set to '$separator'.");
                 }
             }
         }
@@ -321,12 +327,12 @@ abstract class BaseQuery implements \IteratorAggregate
     }
 
     /**
-     * @param mixed|\DateTime $val
+     * @param mixed|DateTime $val
      * @return string
      */
     private function formatValue($val)
     {
-        if ($val instanceof \DateTime) {
+        if (DateTime instanceof $val) {
             return $val->format("Y-m-d H:i:s"); //! may be driver specific
         }
         return $val;
