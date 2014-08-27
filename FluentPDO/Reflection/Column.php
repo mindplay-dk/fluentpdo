@@ -7,7 +7,7 @@ namespace FluentPDO\Reflection;
  *
  * @property-read string $name column name
  */
-abstract class Column extends Singleton
+abstract class Column
 {
     /**
      * @var Table parent table
