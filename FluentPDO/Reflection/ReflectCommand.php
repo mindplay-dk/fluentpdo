@@ -46,11 +46,16 @@ class ReflectCommand
     public $namespace;
 
     /**
+     * @var string output filename
+     */
+    public $output;
+
+    /**
      * @return self command instance configured with command-line switches
      */
     public static function create()
     {
-        $options = getopt('', array('host:', 'port:', 'database:', 'user:', 'password:', 'namespace:'));
+        $options = getopt('', array('host:', 'port:', 'database:', 'user:', 'password:', 'namespace:', 'output:'));
 
         $command = new self;
 
@@ -82,7 +87,13 @@ class ReflectCommand
 
         $model = $this->createViewModel($schema);
 
-        echo $this->render($model, 'script.php');
+        $script = $this->render($model, 'script.php');
+
+        echo $script;
+
+        if ($this->output) {
+            file_put_contents($this->output, $script);
+        }
     }
 
     /**
@@ -140,7 +151,7 @@ class ReflectCommand
             $tables[] = new TableView($table_name, $class_name, $columns);
         }
 
-        return new ScriptView($schema, $this->database, $this->namespace, $tables);
+        return new ScriptView($schema, $this->database, $this->namespace ?: $this->database, $tables);
     }
 
     /**
